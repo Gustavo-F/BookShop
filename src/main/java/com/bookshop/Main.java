@@ -2,19 +2,25 @@ package com.bookshop;
 
 import com.bookshop.Entities.*;
 
-public class Main {
+import java.util.Scanner;
+
+public class  Main {
     public static void main(String[] args) {
-        Publisher pa = new Publisher();
-        pa.setName("Publisher A");
+        Scanner scanner = new Scanner(System.in);
 
-        Author ab = new Author();
-        ab.setName("Adalberto");
+        int run = 1;
 
-        Book b = new Book();
-        b.setTitle("Book Title");
-        b.addAuthor(ab);
-        b.setPublisher(pa);
+        while (run == 1) {
+            System.out.println("------------------- Menu -------------------\n");
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
 
-        System.out.println(b.getTitle());
+            System.out.println("Type selected option: ");
+            String choice = scanner.nextLine();
+        }
     }
 }

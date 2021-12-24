@@ -1,9 +1,8 @@
 package com.bookshop.Entities;
 
-public class Author extends Person{
-
+public class NullPerson extends Person{
     @Override
     public String getName() {
-        return this.name;
+        return  "";
     }
 }

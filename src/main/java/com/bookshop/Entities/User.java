@@ -14,4 +14,9 @@ public class User extends Person{
 
         this.library.add(book);
     }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
 }

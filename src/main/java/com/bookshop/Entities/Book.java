@@ -8,6 +8,7 @@ public class Book {
     private int pages;
     private float price;
     private List<Author> authorList;
+    private List<Genre> genreList;
     private Publisher publisher;
 
     public String getTitle() {
@@ -47,5 +48,20 @@ public class Book {
             this.authorList = new ArrayList<Author>();
 
         this.authorList.add(author);
+    }
+
+    public List<Author> getAuthors() {
+        return this.authorList;
+    }
+
+    public void addGenre(Genre genre) {
+        if (this.genreList == null)
+            this.genreList = new ArrayList<Genre>();
+
+        this.genreList.add(genre);
+    }
+
+    public List<Genre> getGenres() {
+        return this.genreList;
     }
 }

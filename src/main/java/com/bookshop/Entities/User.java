@@ -19,4 +19,14 @@ public class User extends Person{
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public String getEmail() {
+        return this.name;
+    }
+
+    @Override
+    public String getPhone() {
+        return this.phone;
+    }
 }

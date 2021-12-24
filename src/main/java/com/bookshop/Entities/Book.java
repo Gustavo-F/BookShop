@@ -1,15 +1,20 @@
 package com.bookshop.Entities;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String title;
     private int pages;
     private float price;
-    private List<Author> authorList;
-    private List<Genre> genreList;
-    private Publisher publisher;
+    @ManyToMany private List<Author> authorList;
+    @ManyToMany private List<Genre> genreList;
+    @ManyToOne private Publisher publisher;
 
     public String getTitle() {
         return title;

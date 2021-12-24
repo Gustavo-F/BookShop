@@ -1,6 +1,8 @@
 package com.bookshop;
 
-import com.bookshop.Entities.*;
+import com.bookshop.DB.UtilDB;
+import com.bookshop.Entities.Person;
+import com.bookshop.Entities.Publisher;
 
 import java.util.Scanner;
 
@@ -8,19 +10,14 @@ public class  Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int run = 1;
+        System.out.println("Publisher name: ");
+        String publisherName = scanner.nextLine();
 
-        while (run == 1) {
-            System.out.println("------------------- Menu -------------------\n");
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
+        Person p1 = new Publisher();
+        p1.setName(publisherName);
 
-            System.out.println("Type selected option: ");
-            String choice = scanner.nextLine();
-        }
+        System.out.println(p1.getName());
+
+        System.out.println(UtilDB.getEntityManager());
     }
 }

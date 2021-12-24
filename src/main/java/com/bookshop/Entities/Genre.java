@@ -1,7 +1,14 @@
 package com.bookshop.Entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Genre {
-    private String name;
+    @Id private String name;
+
+    public Genre() {
+    }
 
     public Genre(String name) {
         this.name = name;

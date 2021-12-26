@@ -3,6 +3,7 @@ package com.bookshop.DB;
 import com.bookshop.Entities.Genre;
 
 import javax.persistence.EntityManager;
+import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.List;
 
 public class GenreDAO implements InterfaceDAO<Genre> {
@@ -22,16 +23,25 @@ public class GenreDAO implements InterfaceDAO<Genre> {
 
     @Override
     public void remove(Genre genre) {
-
+        EntityManager em = UtilDB.getEntityManager();
+        em.getTransaction().begin();
+        em.remove(genre);
+        em.getTransaction().commit();
     }
 
     @Override
     public Genre get(Object pk) {
-        return null;
+        Genre genre;
+        genre = UtilDB.getEntityManager().find(Genre.class, pk);
+
+        return genre;
     }
 
     @Override
-    public List getAll() {
-        return null;
+    public List<Genre> getAll() {
+        List<Genre> genres;
+        genres = UtilDB.getEntityManager().createQuery("SELECT g FROM Genre g").getResultList();
+
+        return genres;
     }
 }

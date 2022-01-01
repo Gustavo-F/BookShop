@@ -39,8 +39,7 @@ public class GenreDAO implements InterfaceDAO<Genre> {
 
     @Override
     public List<Genre> getAll() {
-        List<Genre> genres;
-        genres = UtilDB.getEntityManager().createQuery("SELECT g FROM Genre g").getResultList();
+        List<Genre> genres = UtilDB.getEntityManager().createQuery("SELECT g FROM Genre g").getResultList();
 
         return genres;
     }

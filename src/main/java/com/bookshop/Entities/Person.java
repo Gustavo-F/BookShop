@@ -11,6 +11,16 @@ public abstract class Person {
     protected String email;
     protected String phone;
 
+    public Person() {
+
+    }
+
+    public Person(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public abstract String getName();
 
     public void setName(String name) {

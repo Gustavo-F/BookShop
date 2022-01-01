@@ -1,32 +1,19 @@
 package com.bookshop.Entities;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User extends Person{
-    private String username;
+@Entity
+public abstract class User{
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private int id;
+    private String email;
     private String password;
-    private List<Book> library;
+    @ManyToMany private List<Book> library;
 
-    public void addBook(Book book) {
-        if (this.library == null)
-            this.library = new ArrayList<Book>();
+    public abstract void addBook(Book book);
 
-        this.library.add(book);
-    }
+    public abstract String getUsername();
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getEmail() {
-        return this.name;
-    }
-
-    @Override
-    public String getPhone() {
-        return this.phone;
-    }
+    public abstract String getPassword();
 }

@@ -2,6 +2,7 @@ package com.bookshop;
 
 import com.bookshop.DB.AuthorDAO;
 import com.bookshop.DB.GenreDAO;
+import com.bookshop.DB.PublisherDAO;
 import com.bookshop.Entities.Author;
 import com.bookshop.Entities.Genre;
 import com.bookshop.Entities.Person;
@@ -40,6 +41,7 @@ public class  Main {
                     break;
 
                 case "4":
+                    publishersMenu(scanner);
                     break;
 
                 case "5":
@@ -148,6 +150,63 @@ public class  Main {
 
                     Person author = new AuthorDAO().get(authorId);
                     new AuthorDAO().remove(author);
+
+                    break;
+
+                case "4":
+                    run = false;
+                    break;
+
+                default:
+                    System.out.println("Option not available!");
+                    break;
+            }
+        }
+    }
+
+    private static void publishersMenu(Scanner scanner) {
+        boolean run = true;
+
+        while (run) {
+            System.out.println("---------------------- Publishers ----------------------");
+            System.out.println("1 - Add Publisher");
+            System.out.println("2 - List Publishers");
+            System.out.println("3 - Remove Publisher");
+            System.out.println("4 - Back");
+
+            System.out.println("Type your choice: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.println("Publisher Name: ");
+                    String name = scanner.nextLine();
+
+                    System.out.println("Email: ");
+                    String email = scanner.nextLine();
+
+                    System.out.println("Phone: ");
+                    String phone = scanner.nextLine();
+
+                    Person newPublisher = new Publisher(name, email, phone);
+                    new PublisherDAO().persist(newPublisher);
+
+                    break;
+
+                case "2":
+                    List<Person> publishers = new PublisherDAO().getAll();
+
+                    for(int i = 0; i < publishers.size(); i++) {
+                        System.out.println("ID: " + publishers.get(i).getId() + " - Name: " + publishers.get(i).getName());
+                    }
+                    break;
+
+                case "3":
+                    System.out.println("Type the publisher id: ");
+                    int publisherId = scanner.nextInt();
+
+                    Person author = new PublisherDAO().get(publisherId);
+                    new PublisherDAO().remove(author);
 
                     break;
 

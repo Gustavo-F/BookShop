@@ -49,7 +49,6 @@ public class AuthorDAO implements InterfaceDAO<Person> {
     @Override
     public List<Person> getAll() {
         List<Person> authors = UtilDB.getEntityManager().createQuery("SELECT a FROM Author a").getResultList();
-
         return authors;
     }
 }

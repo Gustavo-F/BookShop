@@ -26,4 +26,9 @@ public class Author extends Person {
     public String getPhone() {
         return this.phone;
     }
+
+    @Override
+    public int getId() {
+        return this.id;
+    }
 }

@@ -135,9 +135,20 @@ public class  Main {
                     break;
 
                 case "2":
+                    List<Person> authors = new AuthorDAO().getAll();
+
+                    for(int i = 0; i < authors.size(); i++) {
+                        System.out.println("ID: " + authors.get(i).getId() + " - Name: " + authors.get(i).getName());
+                    }
                     break;
 
                 case "3":
+                    System.out.println("Type the author id: ");
+                    int authorId = scanner.nextInt();
+
+                    Person author = new AuthorDAO().get(authorId);
+                    new AuthorDAO().remove(author);
+
                     break;
 
                 case "4":

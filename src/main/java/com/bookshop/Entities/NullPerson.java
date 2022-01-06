@@ -15,4 +15,9 @@ public class NullPerson extends Person{
     public String getPhone() {
         return "Person Not Found!";
     }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

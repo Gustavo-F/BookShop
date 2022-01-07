@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Book {
+public class Book implements Observable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,6 +15,7 @@ public class Book {
     @ManyToMany private List<Author> authorList;
     @ManyToMany private List<Genre> genreList;
     @ManyToOne private Publisher publisher;
+    private List<Observer> observers;
 
     public String getTitle() {
         return title;
@@ -68,5 +69,29 @@ public class Book {
 
     public List<Genre> getGenres() {
         return this.genreList;
+    }
+
+    public List<Observer> getObservers() {
+        if (observers == null)
+            this.observers = new ArrayList<Observer>();
+
+        return observers;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        getObservers().add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        getObservers().remove(observer);
+    }
+
+    @Override
+    public void notify(String message) {
+        for (Observer o : observers) {
+            o.notify(this, message);
+        }
     }
 }

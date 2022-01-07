@@ -3,7 +3,7 @@ package com.bookshop.Entities;
 import javax.persistence.Entity;
 
 @Entity
-public class UserState extends User{
+public class UserState extends User implements Observer{
     @Override
     public void addBook(Book book) {
 
@@ -17,5 +17,10 @@ public class UserState extends User{
     @Override
     public String getPassword() {
         return null;
+    }
+
+    @Override
+    public void notify(Observable observable, String message) {
+
     }
 }

@@ -79,8 +79,8 @@ public class  Main {
 
                     Genre newGenre = new Genre(genreName);
                     new GenreDAO().persist(newGenre);
-
                     break;
+
                 case "2":
                     List<Genre> genres = new GenreDAO().getAll();
 
@@ -89,17 +89,22 @@ public class  Main {
                     }
 
                     break;
+
                 case "3":
                     System.out.println("Genre to remove: ");
                     genreName = scanner.nextLine();
 
-                    Genre genre = new Genre(genreName);
-                    new GenreDAO().remove(genre);
+                    Genre genre = new GenreDAO().get(genreName);
 
+                    new GenreDAO().remove(genre);
                     break;
+
                 case "4":
-                    return;
+                    run = false;
+                    break;
+
                 default:
+                    System.out.println("Option not available!");
                     break;
             }
         }
@@ -205,8 +210,8 @@ public class  Main {
                     System.out.println("Type the publisher id: ");
                     int publisherId = scanner.nextInt();
 
-                    Person author = new PublisherDAO().get(publisherId);
-                    new PublisherDAO().remove(author);
+                    Person publisher = new PublisherDAO().get(publisherId);
+                    new PublisherDAO().remove(publisher);
 
                     break;
 

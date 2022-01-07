@@ -15,7 +15,17 @@ public class Book implements Observable{
     @ManyToMany private List<Author> authorList;
     @ManyToMany private List<Genre> genreList;
     @ManyToOne private Publisher publisher;
-    private List<Observer> observers;
+    @Transient private List<Observer> observers;
+
+    public Book() {
+
+    }
+
+    public Book(String title, int pages, float price) {
+        this.title = title;
+        this.pages = pages;
+        this.price = price;
+    }
 
     public String getTitle() {
         return title;
@@ -91,7 +101,13 @@ public class Book implements Observable{
     @Override
     public void notify(String message) {
         for (Observer o : observers) {
-            o.notify(this, message);
+            User user = (User) o;
+
+            for (Author author: user.getFavoriteAuthors())
+                if (this.authorList.contains(author)) {
+                    o.notify(this, message);
+                    break;
+                }
         }
     }
 }

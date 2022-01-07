@@ -1,12 +1,10 @@
 package com.bookshop;
 
 import com.bookshop.DB.AuthorDAO;
+import com.bookshop.DB.BookDAO;
 import com.bookshop.DB.GenreDAO;
 import com.bookshop.DB.PublisherDAO;
-import com.bookshop.Entities.Author;
-import com.bookshop.Entities.Genre;
-import com.bookshop.Entities.Person;
-import com.bookshop.Entities.Publisher;
+import com.bookshop.Entities.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +13,9 @@ public class  Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean run = true;
+
+        User user = new UserState("gustavo@email.com", "12345");
+        user.addFavoriteAuthor((Author) new AuthorDAO().get(2));
 
         while (run) {
             System.out.println("---------------------- Home ----------------------");
@@ -30,6 +31,7 @@ public class  Main {
 
             switch (choice) {
                 case "1":
+                    booksMenu(scanner, user);
                     break;
 
                 case "2":
@@ -224,6 +226,91 @@ public class  Main {
                     break;
             }
         }
+    }
+
+    private static void booksMenu(Scanner scanner, User user) {
+        boolean run = true;
+
+        while(run) {
+            System.out.println("---------------------- Books ----------------------");
+            System.out.println("1 - Add Book");
+            System.out.println("2 - List Books");
+            System.out.println("3 - Remove Book");
+            System.out.println("4 - Back");
+
+            System.out.println("Type your choice: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    Book newBook = createBook(scanner);
+                    new BookDAO().persist(newBook);
+
+                    if (newBook.getAuthors() != null) {
+                        newBook.addObserver(user);
+                        newBook.notify("Book added!");
+                    }
+
+                    break;
+
+                case "2":
+                    break;
+
+                case "3":
+                    break;
+
+                case "4":
+                    run = false;
+                    break;
+
+                default:
+                    System.out.println("Option not available!");
+                    break;
+            }
+        }
+    }
+
+    private static Book createBook(Scanner scanner) {
+        System.out.println("Title: ");
+        String title = scanner.nextLine();
+
+        System.out.println("Pages: ");
+        int pages = scanner.nextInt();
+
+        System.out.println("Price");
+        float price = scanner.nextFloat();
+
+        Book newBook = new Book(title, pages, price);
+
+        System.out.println("Add authors? (Y/N)");
+        String choice = scanner.next();
+
+        if (choice.equalsIgnoreCase("y"))
+            addAuthorBook(newBook, scanner);
+
+        return newBook;
+    }
+
+    private static Book addAuthorBook(Book book, Scanner scanner) {
+        List<Person> authors = new AuthorDAO().getAll();
+
+        if (authors != null) {
+            for (Person a : authors) {
+                System.out.println("ID: " + a.getId() + " - Name: " + a.getName());
+            }
+
+            System.out.println("Type author ID: ");
+            int id = scanner.nextInt();
+
+            for (Person a : authors) {
+                if (a.getId() == id) {
+                    book.addAuthor((Author) a);
+                    break;
+                }
+            }
+        }
+
+        return book;
     }
 }
 

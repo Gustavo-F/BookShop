@@ -386,12 +386,16 @@ public class  Main {
             System.out.println("---------------------- User ----------------------");
             System.out.println("1 - Show Library");
             System.out.println("2 - Add book to library");
+            System.out.println("3 - Highest price book");
+            System.out.println("4 - Lowest price book");
+            System.out.println("5 - Average price");
+            System.out.println("6 - Total Spent");
 
             if (userIsLogged(user))
-                System.out.println("3 - LogOut");
+                System.out.println("7 - LogOut");
             else {
-                System.out.println("3 - SignIn");
-                System.out.println("4 - Register");
+                System.out.println("7 - SignIn");
+                System.out.println("8 - Register");
             }
 
             System.out.println("Type your choice: ");
@@ -418,6 +422,11 @@ public class  Main {
                     break;
 
                 case "3":
+                    double highestPrice = user.calculatePrices();
+
+                    break;
+
+                case "7":
                     if (userIsLogged(user))
                         user = new EmptyUser();
                     else {
@@ -441,7 +450,7 @@ public class  Main {
 
                     break;
 
-                case "4":
+                case "8":
                     System.out.println("Email: ");
                     String email = scanner.nextLine();
 

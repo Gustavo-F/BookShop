@@ -8,6 +8,7 @@ public abstract class User implements Observer{
     @Id @Column(unique = true) protected String email;
     protected String password;
     @ManyToMany protected List<Book> library;
+    protected CalculateUserLibrary calculateUserLibrary;
 
     public User() {
 
@@ -29,4 +30,6 @@ public abstract class User implements Observer{
     public abstract void addBook(Book book);
 
     public abstract void removeBook(Book book);
+
+    public abstract double calculatePrices();
 }

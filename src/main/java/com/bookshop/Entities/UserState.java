@@ -54,6 +54,11 @@ public class UserState extends User{
     }
 
     @Override
+    public double calculatePrices() {
+        return this.calculateUserLibrary.calculateUserLibraryPrices(this.library);
+    }
+
+    @Override
     public void notify(Observable observable, String message) {
         System.out.println(message);
     }

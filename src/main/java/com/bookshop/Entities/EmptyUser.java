@@ -14,6 +14,12 @@ public class EmptyUser extends User {
     }
 
     @Override
+    public double calculatePrices() {
+        System.err.println("Login to see your spending!");
+        return 0;
+    }
+
+    @Override
     public String getEmail() {
         return null;
     }

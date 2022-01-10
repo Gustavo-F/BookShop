@@ -16,6 +16,7 @@ public class BookDAO implements InterfaceDAO<Book> {
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
+            System.err.println(e);
             System.err.println("This book already exists!");
         }
     }

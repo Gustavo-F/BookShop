@@ -6,18 +6,23 @@ import java.util.List;
 
 @Entity
 public class UserState extends User{
+
+    public UserState() {
+
+    }
+
     public UserState(String email, String password) {
         super(email, password);
     }
 
     @Override
-    public String getUsername() {
-        return null;
+    public String getEmail() {
+        return this.email;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
@@ -29,6 +34,16 @@ public class UserState extends User{
     }
 
     @Override
+    public void showLibrary() {
+        if (getLibrary().size() == 0)
+            System.out.println("Your library is empty!");
+        else
+            for (Book b : getLibrary()) {
+                System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
+            }
+    }
+
+    @Override
     public void addBook(Book book) {
         this.getLibrary().add(book);
     }
@@ -36,25 +51,6 @@ public class UserState extends User{
     @Override
     public void removeBook(Book book) {
         this.getLibrary().remove(book);
-    }
-
-    @Override
-    public List<Author> getFavoriteAuthors() {
-        if (favoriteAuthors == null)
-            this.favoriteAuthors = new ArrayList<Author>();
-
-        return this.favoriteAuthors;
-    }
-
-    @Override
-    public void addFavoriteAuthor(Author author) {
-        this.getFavoriteAuthors().add(author);
-    }
-
-    @Override
-    public void removeFavoriteAuthor(Author author) {
-        this.getFavoriteAuthors().remove(author);
-
     }
 
     @Override

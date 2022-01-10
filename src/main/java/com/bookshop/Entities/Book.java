@@ -27,6 +27,10 @@ public class Book implements Observable{
         this.price = price;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -101,13 +105,7 @@ public class Book implements Observable{
     @Override
     public void notify(String message) {
         for (Observer o : observers) {
-            User user = (User) o;
-
-            for (Author author: user.getFavoriteAuthors())
-                if (this.authorList.contains(author)) {
-                    o.notify(this, message);
-                    break;
-                }
+            o.notify(this, message);
         }
     }
 }

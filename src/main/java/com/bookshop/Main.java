@@ -1,9 +1,6 @@
 package com.bookshop;
 
-import com.bookshop.DB.AuthorDAO;
-import com.bookshop.DB.BookDAO;
-import com.bookshop.DB.GenreDAO;
-import com.bookshop.DB.PublisherDAO;
+import com.bookshop.DB.*;
 import com.bookshop.Entities.*;
 
 import java.util.List;
@@ -14,8 +11,7 @@ public class  Main {
         Scanner scanner = new Scanner(System.in);
         boolean run = true;
 
-        User user = new UserState("gustavo@email.com", "12345");
-        user.addFavoriteAuthor((Author) new AuthorDAO().get(2));
+        User user = new EmptyUser();
 
         while (run) {
             System.out.println("---------------------- Home ----------------------");
@@ -23,7 +19,7 @@ public class  Main {
             System.out.println("2 - Authors");
             System.out.println("3 - Genres");
             System.out.println("4 - Publishers");
-            System.out.println("5 - SignIn/SignUp");
+            System.out.println("5 - User Area");
             System.out.println("6 - Exit");
 
             System.out.println("Type your choice: ");
@@ -47,6 +43,7 @@ public class  Main {
                     break;
 
                 case "5":
+                    user = userMenu(scanner, user);
                     break;
 
                 case  "6":
@@ -254,9 +251,21 @@ public class  Main {
                     break;
 
                 case "2":
+                    List<Book> books = new BookDAO().getAll();
+
+                    for(Book b : books) {
+                        System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
+                    }
+
                     break;
 
                 case "3":
+                    System.out.println("Type book id: ");
+                    int bookId = scanner.nextInt();
+
+                    Book book = new BookDAO().get(bookId);
+                    new BookDAO().remove(book);
+
                     break;
 
                 case "4":
@@ -282,35 +291,182 @@ public class  Main {
 
         Book newBook = new Book(title, pages, price);
 
-        System.out.println("Add authors? (Y/N)");
-        String choice = scanner.next();
+        addAuthorBook(newBook, scanner);
+        addGenreBook(newBook, scanner);
 
-        if (choice.equalsIgnoreCase("y"))
-            addAuthorBook(newBook, scanner);
+//        Set Publisher
+//        List<Person> publishers = new PublisherDAO().getAll();
+//
+//        for (Person p : publishers) {
+//            System.out.println("ID: " + p.getId() + " - Name: " + p.getName());
+//        }
+//
+//        System.out.println("Type publisher id: ");
+//        int publisherId = scanner.nextInt();
+//
+//        for (Person p : publishers) {
+//            if (publisherId == p.getId()) {
+//                newBook.setPublisher((Publisher) p);
+//                System.out.println(newBook.getPublisher().getName());
+//                break;
+//            }
+//        }
 
         return newBook;
     }
 
     private static Book addAuthorBook(Book book, Scanner scanner) {
         List<Person> authors = new AuthorDAO().getAll();
+        boolean loop = true;
+
+        Scanner numScan = new Scanner(System.in);
 
         if (authors != null) {
             for (Person a : authors) {
                 System.out.println("ID: " + a.getId() + " - Name: " + a.getName());
             }
 
-            System.out.println("Type author ID: ");
-            int id = scanner.nextInt();
+            do {
+                System.out.println("Type author ID: ");
+                int id = scanner.nextInt();
 
-            for (Person a : authors) {
-                if (a.getId() == id) {
-                    book.addAuthor((Author) a);
-                    break;
+                for (Person a : authors) {
+                    if (a.getId() == id) {
+                        book.addAuthor((Author) a);
+                        break;
+                    }
                 }
-            }
+
+                System.out.println("Add another author? (Y/N)");
+                String continueLoop = numScan.nextLine();
+
+                if (continueLoop.equalsIgnoreCase("n"))
+                    loop = false;
+
+            } while (loop);
         }
 
         return book;
+    }
+
+    private static Book addGenreBook(Book book, Scanner scanner) {
+        List<Genre> genres = new GenreDAO().getAll();
+        boolean loop = true;
+
+        for (Genre g : genres) {
+            System.out.println("Genre: " + g.getName());
+        }
+
+        do {
+            System.out.println("Genre to add: ");
+            String genreName = scanner.nextLine();
+
+            for (Genre g : genres) {
+                if (g.getName() == genreName) {
+                    book.addGenre(g);
+                    break;
+                }
+            }
+
+            System.out.println("Add another genre? (Y/N)");
+            String continueLoop = scanner.nextLine();
+
+            if (continueLoop.equalsIgnoreCase("n"))
+                loop = false;
+
+        } while (loop);
+
+        return book;
+    }
+
+    private static User userMenu(Scanner scanner, User user) {
+        boolean run = true;
+
+        while (run) {
+            System.out.println("---------------------- User ----------------------");
+            System.out.println("1 - Show Library");
+            System.out.println("2 - Add book to library");
+
+            if (userIsLogged(user))
+                System.out.println("3 - LogOut");
+            else {
+                System.out.println("3 - SignIn");
+                System.out.println("4 - Register");
+            }
+
+            System.out.println("Type your choice: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    user.showLibrary();
+                    break;
+
+                case "2":
+                    List<Book> books = new BookDAO().getAll();
+                    for(Book b : books)
+                        System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
+
+                    System.out.println("Type book id: ");
+                    int bookId = scanner.nextInt();
+
+                    Book book = new BookDAO().get(bookId);
+                    user.addBook(book);
+
+                    new UserDAO().persist(user);
+
+                    break;
+
+                case "3":
+                    if (userIsLogged(user))
+                        user = new EmptyUser();
+                    else {
+                        System.out.println("Email: ");
+                        String email = scanner.nextLine();
+
+                        System.out.println("Password: ");
+                        String password = scanner.nextLine();
+
+                        User auxUser = new UserDAO().get(email);
+
+                        if (auxUser == null)
+                            System.err.println("Email or password incorrect! Try again.");
+                        else {
+                            if (auxUser.getPassword().equals(password))
+                                user = (UserState) auxUser;
+                            else
+                                System.err.println("Email or password incorrect! Try again.");
+                        }
+                    }
+
+                    break;
+
+                case "4":
+                    System.out.println("Email: ");
+                    String email = scanner.nextLine();
+
+                    System.out.println("Password: ");
+                    String password = scanner.nextLine();
+
+                    user = new UserState(email, password);
+                    new UserDAO().persist(user);
+
+                    break;
+
+                default:
+                    System.out.println("Option not available!");
+                    break;
+            }
+        }
+
+        return user;
+    }
+
+    private static boolean userIsLogged(User user) {
+        if (!(user.getLibrary() == null))
+            return true;
+
+        return false;
     }
 }
 

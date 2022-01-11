@@ -243,10 +243,10 @@ public class  Main {
                     Book newBook = createBook(scanner);
                     new BookDAO().persist(newBook);
 
-                    if (newBook.getAuthors() != null) {
-                        newBook.addObserver(user);
-                        newBook.notify("Book added!");
-                    }
+                    String notifyMessage = "The book '" + newBook.getTitle() + "' is now available! Written by: " + newBook.writtenBy();
+                    newBook.addObserver(user);
+                    newBook.notify(notifyMessage);
+
 
                     break;
 

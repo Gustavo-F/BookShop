@@ -64,24 +64,42 @@ public class Book implements Observable{
     }
 
     public void addAuthor(Author author) {
-        if (this.authorList == null)
-            this.authorList = new ArrayList<Author>();
-
-        this.authorList.add(author);
+        this.getAuthors().add(author);
     }
 
     public List<Author> getAuthors() {
+        if (this.authorList == null)
+            this.authorList = new ArrayList<Author>();
+
         return this.authorList;
     }
 
-    public void addGenre(Genre genre) {
-        if (this.genreList == null)
-            this.genreList = new ArrayList<Genre>();
+    public String writtenBy() {
+        if (this.getAuthors().size() == 1)
+            return this.getAuthors().get(0).getName();
 
-        this.genreList.add(genre);
+        String aux = "";
+        for (int i = 0; i < this.getAuthors().size(); i++) {
+            if ( i < (this.getAuthors().size() - 2)) {
+                aux.concat(this.getAuthors().get(i).getName() + ", ");
+            } else if ( i == (this.getAuthors().size() - 2)) {
+                aux.concat(this.getAuthors().get(i).getName() + " and ");
+            } else {
+                aux.concat(this.getAuthors().get(i).getName());
+            }
+        }
+
+        return aux;
+    }
+
+    public void addGenre(Genre genre) {
+        this.getGenres().add(genre);
     }
 
     public List<Genre> getGenres() {
+        if (this.genreList == null)
+            this.genreList = new ArrayList<Genre>();
+
         return this.genreList;
     }
 

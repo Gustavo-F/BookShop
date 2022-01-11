@@ -391,12 +391,14 @@ public class  Main {
             System.out.println("5 - Average price");
             System.out.println("6 - Total Spent");
 
-            if (userIsLogged(user))
+            if (userIsLogged(user)) {
                 System.out.println("7 - LogOut");
-            else {
+            } else {
                 System.out.println("7 - SignIn");
                 System.out.println("8 - Register");
             }
+
+            System.out.println("9 - Back");
 
             System.out.println("Type your choice: ");
             String choice = scanner.nextLine();
@@ -422,8 +424,27 @@ public class  Main {
                     break;
 
                 case "3":
-                    double highestPrice = user.calculatePrices();
+                    user.setCalculateStrategy(new HighestPrice());
 
+                    System.out.println("Highest price: " + user.calculatePrices());
+                    break;
+
+                case "4":
+                    user.setCalculateStrategy(new LowestPrice());
+
+                    System.out.println("Lowest price: " + user.calculatePrices());
+                    break;
+
+                case "5":
+                    user.setCalculateStrategy(new AveragePrice());
+
+                    System.out.println("Average price: " + user.calculatePrices());
+                    break;
+
+                case "6":
+                    user.setCalculateStrategy(new TotalSpent());
+
+                    System.out.println("Total Spent: " + user.calculatePrices());
                     break;
 
                 case "7":
@@ -460,6 +481,10 @@ public class  Main {
                     user = new UserState(email, password);
                     new UserDAO().persist(user);
 
+                    break;
+
+                case "9":
+                    run = false;
                     break;
 
                 default:

@@ -419,7 +419,7 @@ public class  Main {
                     Book book = new BookDAO().get(bookId);
                     user.addBook(book);
 
-                    new UserDAO().persist(user);
+                    new UserDAOProxy().persist(user);
 
                     break;
 
@@ -457,16 +457,13 @@ public class  Main {
                         System.out.println("Password: ");
                         String password = scanner.nextLine();
 
-                        User auxUser = new UserDAO().get(email);
+                        User auxUser = new UserState(email, password);
+                        auxUser = new UserDAODecorator().get(auxUser);
 
                         if (auxUser == null)
                             System.err.println("Email or password incorrect! Try again.");
-                        else {
-                            if (auxUser.getPassword().equals(password))
-                                user = (UserState) auxUser;
-                            else
-                                System.err.println("Email or password incorrect! Try again.");
-                        }
+                        else
+                            user = auxUser;
                     }
 
                     break;
@@ -478,8 +475,14 @@ public class  Main {
                     System.out.println("Password: ");
                     String password = scanner.nextLine();
 
-                    user = new UserState(email, password);
-                    new UserDAO().persist(user);
+                    try {
+                        User newUser = new UserState(email, password);
+
+                        new UserDAODecorator().persist(newUser);
+                        user = newUser;
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
 
                     break;
 

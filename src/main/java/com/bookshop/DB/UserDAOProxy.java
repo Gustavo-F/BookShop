@@ -3,9 +3,11 @@ package com.bookshop.DB;
 import com.bookshop.Entities.User;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
-public class UserDAO implements InterfaceDAO<User> {
+public class UserDAOProxy implements InterfaceDAO<User> {
     @Override
     public void persist(User user) {
         EntityManager em = UtilDB.getEntityManager();
@@ -25,8 +27,9 @@ public class UserDAO implements InterfaceDAO<User> {
     }
 
     @Override
-    public User get(Object pk) {
-        User user = UtilDB.getEntityManager().find(User.class, pk);
+    public User get(Object pk) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method getEmailMethod = pk.getClass().getMethod("getEmail", null);
+        User user = UtilDB.getEntityManager().find(User.class, getEmailMethod.invoke(pk));
 
         return user;
     }

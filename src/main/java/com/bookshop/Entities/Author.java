@@ -6,29 +6,10 @@ import javax.persistence.Entity;
 public class Author extends Person {
 
     public Author() {
+
     }
 
     public Author(String name, String email, String phone) {
         super(name, email, phone);
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getEmail() {
-        return this.email;
-    }
-
-    @Override
-    public String getPhone() {
-        return this.phone;
-    }
-
-    @Override
-    public int getId() {
-        return this.id;
     }
 }

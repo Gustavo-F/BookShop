@@ -41,6 +41,7 @@ public class EmptyUser extends User {
 
     @Override
     public void notify(Observable observable, String message) {
-
+        message = message.concat("\nLogIn to add to your library.");
+        System.out.println(message);
     }
 }

@@ -5,30 +5,11 @@ import javax.persistence.Entity;
 @Entity
 public class Publisher extends Person{
 
-    public Publisher(){
+    public Publisher() {
+
     }
 
     public Publisher(String name, String email, String phone) {
         super(name, email, phone);
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getEmail() {
-        return this.email;
-    }
-
-    @Override
-    public String getPhone() {
-        return this.phone;
-    }
-
-    @Override
-    public int getId() {
-        return this.id;
     }
 }

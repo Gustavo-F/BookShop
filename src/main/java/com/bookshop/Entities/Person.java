@@ -21,23 +21,35 @@ public abstract class Person {
         this.phone = phone;
     }
 
-    public abstract String getName();
+    public String getName() {
+        return this.name;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public abstract String getEmail();
+    public String getEmail() {
+        return this.email;
+    }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public abstract String getPhone();
+    public String getPhone() {
+        return this.phone;
+    }
 
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public abstract int getId();
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

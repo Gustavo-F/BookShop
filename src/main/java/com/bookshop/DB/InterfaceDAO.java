@@ -8,7 +8,7 @@ public interface InterfaceDAO<T> {
 
     public void remove(T t);
 
-    public T get(Object pk) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
+    public T get(Object pk) throws Exception;
 
     public List<T> getAll();
 }

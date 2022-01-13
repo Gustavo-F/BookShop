@@ -11,45 +11,34 @@ public abstract class Person {
     protected String email;
     protected String phone;
 
-    public Person() {
-
+    public Person named(String name) {
+        this.name = name;
+        return this;
     }
 
-    public Person(String name, String email, String phone) {
-        this.name = name;
+    public Person emailAddress(String email) {
         this.email = email;
+        return this;
+    }
+
+    public Person phoneNumber(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhone() {
         return this.phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public int getId() {
         return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

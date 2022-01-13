@@ -5,7 +5,7 @@ import com.bookshop.Entities.Book;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class BookDAO implements InterfaceDAO<Book> {
+public class BookDAOProxy implements InterfaceDAO<Book> {
     @Override
     public void persist(Book book) {
         EntityManager em = UtilDB.getEntityManager();
@@ -17,7 +17,6 @@ public class BookDAO implements InterfaceDAO<Book> {
         } catch (Exception e) {
             em.getTransaction().rollback();
             System.err.println(e);
-            System.err.println("This book already exists!");
         }
     }
 

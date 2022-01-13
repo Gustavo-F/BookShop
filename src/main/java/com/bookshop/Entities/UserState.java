@@ -7,12 +7,16 @@ import java.util.List;
 @Entity
 public class UserState extends User{
 
-    public UserState() {
-
+    @Override
+    public User emailAddress(String email) {
+        this.email = email;
+        return this;
     }
 
-    public UserState(String email, String password) {
-        super(email, password);
+    @Override
+    public User passwordIs(String password) {
+        this.password = password;
+        return this;
     }
 
     @Override
@@ -34,6 +38,11 @@ public class UserState extends User{
     }
 
     @Override
+    public void addBook(Book book) {
+        this.getLibrary().add(book);
+    }
+
+    @Override
     public void showLibrary() {
         if (getLibrary().size() == 0)
             System.out.println("Your library is empty!");
@@ -41,11 +50,6 @@ public class UserState extends User{
             for (Book b : getLibrary()) {
                 System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
             }
-    }
-
-    @Override
-    public void addBook(Book book) {
-        this.getLibrary().add(book);
     }
 
     @Override

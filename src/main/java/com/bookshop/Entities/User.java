@@ -10,14 +10,9 @@ public abstract class User implements Observer{
     @ManyToMany protected List<Book> library;
     @Transient protected CalculateUserLibrary calculateUserLibrary;
 
-    public User() {
+    public abstract User emailAddress(String email);
 
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+    public abstract User passwordIs(String password);
 
     public abstract String getEmail();
 

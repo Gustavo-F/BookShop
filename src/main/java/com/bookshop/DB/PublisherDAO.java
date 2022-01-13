@@ -18,8 +18,6 @@ public class PublisherDAO implements InterfaceDAO<Person> {
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Publisher already exists!");
-
             System.err.println(e);
         }
     }

@@ -133,11 +133,9 @@ public class  Main {
                     System.out.println("Phone: ");
                     String phone = scanner.nextLine();
 
-                    Author newAuthor = new Author(name, email, phone);
-                    System.out.println(newAuthor.getName());
+                    Person newAuthor = new Author().named(name).emailAddress(email).phoneNumber(phone);
 
                     new AuthorDAO().persist(newAuthor);
-
                     break;
 
                 case "2":
@@ -192,16 +190,16 @@ public class  Main {
                     System.out.println("Phone: ");
                     String phone = scanner.nextLine();
 
-                    Person newPublisher = new Publisher(name, email, phone);
-                    new PublisherDAO().persist(newPublisher);
+                    Person newPublisher = new Publisher().named(name).emailAddress(email).phoneNumber(phone);
 
+                    new PublisherDAO().persist(newPublisher);
                     break;
 
                 case "2":
                     List<Person> publishers = new PublisherDAO().getAll();
 
-                    for(int i = 0; i < publishers.size(); i++) {
-                        System.out.println("ID: " + publishers.get(i).getId() + " - Name: " + publishers.get(i).getName());
+                    for(Person publisher : publishers) {
+                        System.out.println("ID: " + publisher.getId() + " - Name: " + publisher.getName() + " - Email: " + publisher.getEmail());
                     }
                     break;
 
@@ -241,7 +239,7 @@ public class  Main {
             switch (choice) {
                 case "1":
                     Book newBook = createBook(scanner);
-                    new BookDAO().persist(newBook);
+                    new BookDAOProxy().persist(newBook);
 
                     String notifyMessage = "The book '" + newBook.getTitle() + "' is now available! Written by: " + newBook.writtenBy();
                     newBook.addObserver(user);
@@ -251,7 +249,7 @@ public class  Main {
                     break;
 
                 case "2":
-                    List<Book> books = new BookDAO().getAll();
+                    List<Book> books = new BookDAOProxy().getAll();
 
                     for(Book b : books) {
                         System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
@@ -263,8 +261,8 @@ public class  Main {
                     System.out.println("Type book id: ");
                     int bookId = scanner.nextInt();
 
-                    Book book = new BookDAO().get(bookId);
-                    new BookDAO().remove(book);
+                    Book book = new BookDAOProxy().get(bookId);
+                    new BookDAOProxy().remove(book);
 
                     break;
 
@@ -289,29 +287,30 @@ public class  Main {
         System.out.println("Price");
         float price = scanner.nextFloat();
 
-        Book newBook = new Book(title, pages, price);
+        Book newBook = new Book().entitled(title).numberOfPages(pages).priced(price);
 
         addAuthorBook(newBook, scanner);
         addGenreBook(newBook, scanner);
 
 //        Set Publisher
-//        List<Person> publishers = new PublisherDAO().getAll();
-//
-//        for (Person p : publishers) {
-//            System.out.println("ID: " + p.getId() + " - Name: " + p.getName());
-//        }
-//
-//        System.out.println("Type publisher id: ");
-//        int publisherId = scanner.nextInt();
-//
-//        for (Person p : publishers) {
-//            if (publisherId == p.getId()) {
-//                newBook.setPublisher((Publisher) p);
-//                System.out.println(newBook.getPublisher().getName());
-//                break;
-//            }
-//        }
+        List<Person> publishers = new PublisherDAO().getAll();
 
+        for (Person p : publishers) {
+            System.out.println("ID: " + p.getId() + " - Name: " + p.getName());
+        }
+
+        System.out.println("Type publisher id: ");
+        int publisherId = scanner.nextInt();
+
+        for (Person p : publishers) {
+            if (publisherId == p.getId()) {
+                newBook.publishedBy((Publisher) p);
+                System.out.println(newBook.getPublisher().getName());
+                break;
+            }
+        }
+
+        System.out.println("Book Publisher: " + newBook.getPublisher().getName());
         return newBook;
     }
 
@@ -409,14 +408,14 @@ public class  Main {
                     break;
 
                 case "2":
-                    List<Book> books = new BookDAO().getAll();
+                    List<Book> books = new BookDAOProxy().getAll();
                     for(Book b : books)
                         System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
 
                     System.out.println("Type book id: ");
                     int bookId = scanner.nextInt();
 
-                    Book book = new BookDAO().get(bookId);
+                    Book book = new BookDAOProxy().get(bookId);
                     user.addBook(book);
 
                     new UserDAOProxy().persist(user);
@@ -457,7 +456,7 @@ public class  Main {
                         System.out.println("Password: ");
                         String password = scanner.nextLine();
 
-                        User auxUser = new UserState(email, password);
+                        User auxUser = new UserState().emailAddress(email).passwordIs(password);
                         auxUser = new UserDAODecorator().get(auxUser);
 
                         if (auxUser == null)
@@ -476,7 +475,7 @@ public class  Main {
                     String password = scanner.nextLine();
 
                     try {
-                        User newUser = new UserState(email, password);
+                        User newUser = new UserState().emailAddress(email).passwordIs(password);
 
                         new UserDAODecorator().persist(newUser);
                         user = newUser;

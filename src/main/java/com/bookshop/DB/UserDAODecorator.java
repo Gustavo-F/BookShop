@@ -18,7 +18,7 @@ public class UserDAODecorator implements InterfaceDAO<User> {
     public void persist(User user) throws Exception {
         if (user.getEmail().isBlank())
             throw new Exception("Please enter a valid email address.");
-        else if (user.getPassword().isBlank() || user.getPassword().length() < 8 )
+        else if (user.getPassword().isBlank() || user.getPassword().length() < 8)
             throw new Exception("Please enter a valid password. The password must be at least 8 characters.");
 
         getUserDAO().persist(user);
@@ -26,7 +26,7 @@ public class UserDAODecorator implements InterfaceDAO<User> {
 
     @Override
     public void remove(User user) {
-
+        getUserDAO().remove(user);
     }
 
     @Override
@@ -49,6 +49,6 @@ public class UserDAODecorator implements InterfaceDAO<User> {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return getUserDAO().getAll();
     }
 }

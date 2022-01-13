@@ -17,26 +17,28 @@ public class Book implements Observable{
     @ManyToOne private Publisher publisher;
     @Transient private List<Observer> observers;
 
-    public Book() {
-
-    }
-
-    public Book(String title, int pages, float price) {
+    public Book entitled(String title) {
         this.title = title;
-        this.pages = pages;
-        this.price = price;
+        return this;
     }
 
-    public int getId() {
-        return this.id;
+    public Book priced(float price) {
+        this.price = price;
+        return this;
+    }
+
+    public Book numberOfPages(int pages) {
+        this.pages = pages;
+        return this;
+    }
+
+    public Book publishedBy(Publisher publisher) {
+        this.publisher = publisher;
+        return this;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public int getPages() {
@@ -51,20 +53,8 @@ public class Book implements Observable{
         return price;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
     public Publisher getPublisher() {
         return publisher;
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
-
-    public void addAuthor(Author author) {
-        this.getAuthors().add(author);
     }
 
     public List<Author> getAuthors() {
@@ -72,6 +62,10 @@ public class Book implements Observable{
             this.authorList = new ArrayList<Author>();
 
         return this.authorList;
+    }
+
+    public void addAuthor(Author author) {
+        this.getAuthors().add(author);
     }
 
     public String writtenBy() {
@@ -92,15 +86,15 @@ public class Book implements Observable{
         return aux;
     }
 
-    public void addGenre(Genre genre) {
-        this.getGenres().add(genre);
-    }
-
     public List<Genre> getGenres() {
         if (this.genreList == null)
             this.genreList = new ArrayList<Genre>();
 
         return this.genreList;
+    }
+
+    public void addGenre(Genre genre) {
+        this.getGenres().add(genre);
     }
 
     public List<Observer> getObservers() {
@@ -125,5 +119,9 @@ public class Book implements Observable{
         for (Observer o : observers) {
             o.notify(this, message);
         }
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

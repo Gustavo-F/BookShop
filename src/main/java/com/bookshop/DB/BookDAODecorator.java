@@ -15,8 +15,12 @@ public class BookDAODecorator implements InterfaceDAO<Book> {
     }
 
     @Override
-    public void persist(Book book) throws Exception {
-        getBookDAO().persist(book);
+    public void persist(Book book){
+        try {
+            getBookDAO().persist(book);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
     @Override
@@ -25,12 +29,18 @@ public class BookDAODecorator implements InterfaceDAO<Book> {
     }
 
     @Override
-    public Book get(Object pk) throws Exception {
+    public Book get(Object pk){
+        try {
+            return new BookDAOProxy().get(pk);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+
         return null;
     }
 
     @Override
     public List<Book> getAll() {
-        return null;
+        return getBookDAO().getAll();
     }
 }

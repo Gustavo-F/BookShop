@@ -239,7 +239,7 @@ public class  Main {
             switch (choice) {
                 case "1":
                     Book newBook = createBook(scanner);
-                    new BookDAOProxy().persist(newBook);
+                    new BookDAODecorator().persist(newBook);
 
                     String notifyMessage = "The book '" + newBook.getTitle() + "' is now available! Written by: " + newBook.writtenBy();
                     newBook.addObserver(user);
@@ -249,7 +249,7 @@ public class  Main {
                     break;
 
                 case "2":
-                    List<Book> books = new BookDAOProxy().getAll();
+                    List<Book> books = new BookDAODecorator().getAll();
 
                     for(Book b : books) {
                         System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
@@ -261,8 +261,8 @@ public class  Main {
                     System.out.println("Type book id: ");
                     int bookId = scanner.nextInt();
 
-                    Book book = new BookDAOProxy().get(bookId);
-                    new BookDAOProxy().remove(book);
+                    Book book = new BookDAODecorator().get(bookId);
+                    new BookDAODecorator().remove(book);
 
                     break;
 
@@ -380,24 +380,26 @@ public class  Main {
 
     private static User userMenu(Scanner scanner, User user) {
         boolean run = true;
+        CommandExecutor commandExecutor = new CommandExecutor();
 
         while (run) {
             System.out.println("---------------------- User ----------------------");
             System.out.println("1 - Show Library");
             System.out.println("2 - Add book to library");
-            System.out.println("3 - Highest price book");
-            System.out.println("4 - Lowest price book");
-            System.out.println("5 - Average price");
-            System.out.println("6 - Total Spent");
+            System.out.println("3 - Remove book from your library");
+            System.out.println("4 - Highest price book");
+            System.out.println("5 - Lowest price book");
+            System.out.println("6 - Average price");
+            System.out.println("7 - Total Spent");
 
             if (userIsLogged(user)) {
-                System.out.println("7 - LogOut");
+                System.out.println("8 - LogOut");
             } else {
-                System.out.println("7 - SignIn");
-                System.out.println("8 - Register");
+                System.out.println("8 - SignIn");
+                System.out.println("9 - Register");
             }
 
-            System.out.println("9 - Back");
+            System.out.println("10 - Back");
 
             System.out.println("Type your choice: ");
             String choice = scanner.nextLine();
@@ -408,45 +410,66 @@ public class  Main {
                     break;
 
                 case "2":
-                    List<Book> books = new BookDAOProxy().getAll();
+                    List<Book> books = new BookDAODecorator().getAll();
                     for(Book b : books)
                         System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
 
                     System.out.println("Type book id: ");
                     int bookId = scanner.nextInt();
 
-                    Book book = new BookDAOProxy().get(bookId);
-                    user.addBook(book);
+                    try {
+                        Book book = new BookDAODecorator().get(bookId);
+                        commandExecutor.execute(new AddBookCommand(user), book);
 
-                    new UserDAOProxy().persist(user);
+                        new UserDAODecorator().persist(user);
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
 
                     break;
 
                 case "3":
+                    user.showLibrary();
+
+                    System.out.println("Book ID to remove: ");
+                    bookId = scanner.nextInt();
+
+                    try {
+                        Book book = new BookDAODecorator().get(bookId);
+                        commandExecutor.execute(new RemoveBookCommand(user), book);
+
+                        new UserDAODecorator().persist(user);
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
+
+                    break;
+
+                case "4":
                     user.setCalculateStrategy(new HighestPrice());
 
                     System.out.println("Highest price: " + user.calculatePrices());
                     break;
 
-                case "4":
+                case "5":
                     user.setCalculateStrategy(new LowestPrice());
 
                     System.out.println("Lowest price: " + user.calculatePrices());
                     break;
 
-                case "5":
+                case "6":
                     user.setCalculateStrategy(new AveragePrice());
 
                     System.out.println("Average price: " + user.calculatePrices());
                     break;
 
-                case "6":
+                case "7":
                     user.setCalculateStrategy(new TotalSpent());
 
                     System.out.println("Total Spent: " + user.calculatePrices());
                     break;
 
-                case "7":
+                case "8":
                     if (userIsLogged(user))
                         user = new EmptyUser();
                     else {
@@ -467,7 +490,7 @@ public class  Main {
 
                     break;
 
-                case "8":
+                case "9":
                     System.out.println("Email: ");
                     String email = scanner.nextLine();
 
@@ -485,7 +508,7 @@ public class  Main {
 
                     break;
 
-                case "9":
+                case "10":
                     run = false;
                     break;
 

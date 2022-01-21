@@ -27,7 +27,7 @@ public class  Main {
 
             switch (choice) {
                 case "1":
-                    booksMenu(scanner, user);
+                    booksMenu(user);
                     break;
 
                 case "2":
@@ -223,22 +223,24 @@ public class  Main {
         }
     }
 
-    private static void booksMenu(Scanner scanner, User user) {
+    private static void booksMenu(User user) {
         boolean run = true;
+        Scanner scan = new Scanner(System.in);
 
         while(run) {
             System.out.println("---------------------- Books ----------------------");
             System.out.println("1 - Add Book");
             System.out.println("2 - List Books");
-            System.out.println("3 - Remove Book");
-            System.out.println("4 - Back");
+            System.out.println("3 - Get Book Genres");
+            System.out.println("4 - Remove Book");
+            System.out.println("5 - Back");
 
             System.out.println("Type your choice: ");
-            String choice = scanner.nextLine();
+            String choice = scan.nextLine();
 
             switch (choice) {
                 case "1":
-                    Book newBook = createBook(scanner);
+                    Book newBook = createBook();
                     new BookDAODecorator().persist(newBook);
 
                     String notifyMessage = "The book '" + newBook.getTitle() + "' is now available! Written by: " + newBook.writtenBy();
@@ -258,15 +260,35 @@ public class  Main {
                     break;
 
                 case "3":
+                    books = new BookDAODecorator().getAll();
+
+                    for(Book b : books) {
+                        System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
+                    }
+
+                    System.out.println("Book ID to show genres: ");
+                    int id = scan.nextInt();
+                    scan.nextLine();
+
+                    for(Book b : books) {
+                        if (b.getId() == id)
+                            for(Genre g : b.getAllGenres())
+                                System.out.println(g.getName());
+                    }
+
+                    break;
+
+                case "4":
                     System.out.println("Type book id: ");
-                    int bookId = scanner.nextInt();
+                    int bookId = scan.nextInt();
+                    scan.nextLine();
 
                     Book book = new BookDAODecorator().get(bookId);
                     new BookDAODecorator().remove(book);
 
                     break;
 
-                case "4":
+                case "5":
                     run = false;
                     break;
 
@@ -277,22 +299,24 @@ public class  Main {
         }
     }
 
-    private static Book createBook(Scanner scanner) {
+    private static Book createBook() {
+        Scanner scan = new Scanner(System.in);
+
         System.out.println("Title: ");
-        String title = scanner.nextLine();
+        String title = scan.nextLine();
 
         System.out.println("Pages: ");
-        int pages = scanner.nextInt();
+        int pages = scan.nextInt();
 
         System.out.println("Price");
-        float price = scanner.nextFloat();
+        float price = scan.nextFloat();
 
         Book newBook = new Book().entitled(title).numberOfPages(pages).priced(price);
 
-        addAuthorBook(newBook, scanner);
-        addGenreBook(newBook, scanner);
+        addAuthorBook(newBook);
+        addGenreBook(newBook);
 
-//        Set Publisher
+//      Set Publisher
         List<Person> publishers = new PublisherDAO().getAll();
 
         for (Person p : publishers) {
@@ -300,7 +324,7 @@ public class  Main {
         }
 
         System.out.println("Type publisher id: ");
-        int publisherId = scanner.nextInt();
+        int publisherId = scan.nextInt();
 
         for (Person p : publishers) {
             if (publisherId == p.getId()) {
@@ -314,11 +338,12 @@ public class  Main {
         return newBook;
     }
 
-    private static Book addAuthorBook(Book book, Scanner scanner) {
+    private static Book addAuthorBook(Book book) {
         List<Person> authors = new AuthorDAO().getAll();
         boolean loop = true;
 
-        Scanner numScan = new Scanner(System.in);
+        Scanner scanString = new Scanner(System.in);
+        Scanner scanNumber = new Scanner(System.in);
 
         if (authors != null) {
             for (Person a : authors) {
@@ -327,7 +352,7 @@ public class  Main {
 
             do {
                 System.out.println("Type author ID: ");
-                int id = scanner.nextInt();
+                int id = scanNumber.nextInt();
 
                 for (Person a : authors) {
                     if (a.getId() == id) {
@@ -337,7 +362,7 @@ public class  Main {
                 }
 
                 System.out.println("Add another author? (Y/N)");
-                String continueLoop = numScan.nextLine();
+                String continueLoop = scanString.nextLine();
 
                 if (continueLoop.equalsIgnoreCase("n"))
                     loop = false;
@@ -348,9 +373,12 @@ public class  Main {
         return book;
     }
 
-    private static Book addGenreBook(Book book, Scanner scanner) {
+    private static Book addGenreBook(Book book) {
         List<Genre> genres = new GenreDAO().getAll();
         boolean loop = true;
+
+        BookFacadeExecutor bookFacade = new BookFacadeExecutor(book);
+        Scanner scan = new Scanner(System.in);
 
         for (Genre g : genres) {
             System.out.println("Genre: " + g.getName());
@@ -358,17 +386,17 @@ public class  Main {
 
         do {
             System.out.println("Genre to add: ");
-            String genreName = scanner.nextLine();
+            String genreName = scan.nextLine();
 
             for (Genre g : genres) {
-                if (g.getName() == genreName) {
-                    book.addGenre(g);
+                if (g.getName().equalsIgnoreCase(genreName)) {
+                    bookFacade.add(g);
                     break;
                 }
             }
 
             System.out.println("Add another genre? (Y/N)");
-            String continueLoop = scanner.nextLine();
+            String continueLoop = scan.nextLine();
 
             if (continueLoop.equalsIgnoreCase("n"))
                 loop = false;

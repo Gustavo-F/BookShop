@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Book implements Observable{
+public class Book implements Observable, BookFacadeInterface<Genre> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -86,15 +86,11 @@ public class Book implements Observable{
         return aux;
     }
 
-    public List<Genre> getGenres() {
-        if (this.genreList == null)
+    public List<Genre> getGenresList() {
+        if (genreList == null)
             this.genreList = new ArrayList<Genre>();
 
         return this.genreList;
-    }
-
-    public void addGenre(Genre genre) {
-        this.getGenres().add(genre);
     }
 
     public List<Observer> getObservers() {
@@ -123,5 +119,15 @@ public class Book implements Observable{
 
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public void addGenre(Genre genre) {
+        this.getGenresList().add(genre);
+    }
+
+    @Override
+    public List<Genre> getAllGenres() {
+        return getGenresList();
     }
 }

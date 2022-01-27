@@ -1,11 +1,16 @@
 package com.bookshop.Entities;
 
+import io.jsondb.annotation.Document;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Document(collection = "genres", schemaVersion = "1.0")
 @Entity
 public class Genre {
-    @Id private String name;
+    @Id // Hibernate
+    @io.jsondb.annotation.Id // JsonDB
+    private String name;
 
     public Genre() {
     }

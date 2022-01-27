@@ -31,5 +31,12 @@
             <artifactId>sqlite-dialect</artifactId>
             <version>0.1.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.jsondb/jsondb-core -->
+        <dependency>
+            <groupId>io.jsondb</groupId>
+            <artifactId>jsondb-core</artifactId>
+            <version>1.0.106</version>
+        </dependency>
     </dependencies>
 </project>

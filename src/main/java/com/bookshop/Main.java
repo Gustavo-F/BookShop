@@ -78,6 +78,10 @@ public class  Main {
 
                     Genre newGenre = new Genre(genreName);
                     new GenreDAO().persist(newGenre);
+
+                    new JsonDB().createCollection(newGenre);
+                    new JsonDB().insert(newGenre);
+                    new JsonDB().get(newGenre.getName(), newGenre.getClass());
                     break;
 
                 case "2":

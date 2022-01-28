@@ -79,9 +79,6 @@ public class  Main {
                     Genre newGenre = new Genre(genreName);
                     new GenreDAO().persist(newGenre);
 
-                    new JsonDB().createCollection(newGenre);
-                    new JsonDB().insert(newGenre);
-                    new JsonDB().get(newGenre.getName(), newGenre.getClass());
                     break;
 
                 case "2":
@@ -97,7 +94,8 @@ public class  Main {
                     System.out.println("Genre to remove: ");
                     genreName = scanner.nextLine();
 
-                    Genre genre = new GenreDAO().get(genreName);
+                    Genre genre = new Genre(genreName);
+                    genre = new GenreDAO().get(genre);
 
                     new GenreDAO().remove(genre);
                     break;

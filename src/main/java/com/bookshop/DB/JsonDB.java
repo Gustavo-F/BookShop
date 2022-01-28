@@ -35,8 +35,8 @@ public class JsonDB {
         getJsonDBTemplate().insert(o);
     }
 
-    public static void get(String id, Class objectClass) {
-        System.out.println("\n" + getJsonDBTemplate().findById(id, objectClass) +"\n");
+    public static Object get(String id, Class objectClass) {
+        return getJsonDBTemplate().findById(id, objectClass);
     }
 
     public static void remove(Object o) {

@@ -3,6 +3,7 @@ package com.bookshop.DB;
 import com.bookshop.Entities.Genre;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.Method;
 import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.List;
 
@@ -15,24 +16,44 @@ public class GenreDAO implements InterfaceDAO<Genre> {
             em.getTransaction().begin();
             em.persist(genre);
             em.getTransaction().commit();
+
+            JsonDB.insert(genre);
         } catch (Exception e ) {
             em.getTransaction().rollback();
-            System.err.println("Genre \"" + genre.getName() + "\" already exists!");
+            System.err.println(e);
         }
     }
 
     @Override
     public void remove(Genre genre) {
         EntityManager em = UtilDB.getEntityManager();
-        em.getTransaction().begin();
-        em.remove(genre);
-        em.getTransaction().commit();
+        try {
+            em.getTransaction().begin();
+            em.remove(genre);
+            em.getTransaction().commit();
+
+            JsonDB.remove(genre);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
     @Override
     public Genre get(Object pk) {
-        Genre genre;
-        genre = UtilDB.getEntityManager().find(Genre.class, pk);
+        Genre genre = null;
+
+        try {
+            Method getGenreName = pk.getClass().getMethod("getName", null);
+            String name = (String) getGenreName.invoke(pk);
+
+            genre = UtilDB.getEntityManager().find(Genre.class, name);
+
+            if (genre == null) {
+                genre = (Genre) JsonDB.get(name, pk.getClass());
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
 
         return genre;
     }

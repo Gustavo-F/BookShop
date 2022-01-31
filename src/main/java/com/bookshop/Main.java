@@ -392,15 +392,17 @@ public class  Main {
             System.out.println("4 - Lowest price book");
             System.out.println("5 - Average price");
             System.out.println("6 - Total Spent");
+            System.out.println("7 - Add book to wishlist");
+            System.out.println("8 - Get total wishlist");
 
             if (userIsLogged(user)) {
-                System.out.println("7 - LogOut");
+                System.out.println("9 - LogOut");
             } else {
-                System.out.println("7 - SignIn");
-                System.out.println("8 - Register");
+                System.out.println("9 - SignIn");
+                System.out.println("10 - Register");
             }
 
-            System.out.println("9 - Back");
+            System.out.println("11 - Back");
 
             System.out.println("Type your choice: ");
             String choice = scanner.nextLine();
@@ -411,10 +413,8 @@ public class  Main {
                     break;
 
                 case "2":
-                    List<Book> books = new BookDAO().getAll();
-                    for(Book b : books)
-                        System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
-
+                	listBooks();
+                	
                     System.out.println("Type book id: ");
                     int bookId = scanner.nextInt();
 
@@ -450,6 +450,25 @@ public class  Main {
                     break;
 
                 case "7":
+                    List<Book> books = new BookDAO().getAll();
+                    for(Book b : books)
+                        System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
+                	
+                    System.out.println("Book ID: ");
+                    bookId = scanner.nextInt();
+                    
+                    book = new BookDAO().get(bookId);
+                    user.getWishlist().addBook(book);;
+
+//                    new UserDAO().persist(user);
+                    
+                    break;
+
+                case "8":
+                	System.out.println("Wishlist total price: " + user.getWishlist().getTotalPrice());
+                    break;
+                    
+                case "9":
                     if (userIsLogged(user))
                         user = new EmptyUser();
                     else {
@@ -473,7 +492,7 @@ public class  Main {
 
                     break;
 
-                case "8":
+                case "10":
                     System.out.println("Email: ");
                     String email = scanner.nextLine();
 
@@ -485,7 +504,7 @@ public class  Main {
 
                     break;
 
-                case "9":
+                case "11":
                     run = false;
                     break;
 
@@ -496,6 +515,12 @@ public class  Main {
         }
 
         return user;
+    }
+    
+    private static void listBooks() {
+        List<Book> books = new BookDAO().getAll();
+        for(Book b : books)
+            System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
     }
 
     private static boolean userIsLogged(User user) {

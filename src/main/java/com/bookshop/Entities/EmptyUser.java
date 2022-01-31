@@ -28,7 +28,7 @@ public class EmptyUser extends User {
     public String getPassword() {
         return null;
     }
-
+    
     @Override
     public List<Book> getLibrary() {
         return null;

@@ -126,4 +126,34 @@ public class Book implements Observable{
             o.notify(this, message);
         }
     }
+    
+    public void addProperties(Wishlist wishlist) {
+    	wishlist.addPropertie(WishlistProperties.PRICE, price);
+    	wishlist.addPropertie(WishlistProperties.PAGES, pages);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

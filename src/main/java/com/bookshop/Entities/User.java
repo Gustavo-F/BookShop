@@ -5,8 +5,11 @@ import java.util.List;
 
 @Entity
 public abstract class User implements Observer{
-    @Id @Column(unique = true) protected String email;
-    protected String password;
+    
+	@Id @Column(unique = true) protected String email;
+	protected String password;
+        
+	@OneToOne protected Wishlist wishlist;
     @ManyToMany protected List<Book> library;
     @Transient protected CalculateUserLibrary calculateUserLibrary;
 
@@ -22,7 +25,7 @@ public abstract class User implements Observer{
     public abstract String getEmail();
 
     public abstract String getPassword();
-
+    
     public abstract List<Book> getLibrary();
 
     public abstract void showLibrary();
@@ -31,9 +34,16 @@ public abstract class User implements Observer{
 
     public abstract void removeBook(Book book);
 
-    public void setCalculateStrategy(CalculateUserLibrary strategy) {
-        this.calculateUserLibrary = strategy;
-    }
-
     public abstract double calculatePrices();
+    
+    public Wishlist getWishlist() {
+		if (wishlist == null)
+			wishlist = new Wishlist();
+		
+		return wishlist;
+	}
+    
+    public void setCalculateStrategy(CalculateUserLibrary strategy) {
+    	this.calculateUserLibrary = strategy;
+    }
 }

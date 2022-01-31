@@ -24,7 +24,7 @@ public class UserState extends User{
     public String getPassword() {
         return this.password;
     }
-
+    
     @Override
     public List<Book> getLibrary() {
         if (this.library == null)

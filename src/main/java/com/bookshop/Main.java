@@ -419,15 +419,17 @@ public class  Main {
             System.out.println("5 - Lowest price book");
             System.out.println("6 - Average price");
             System.out.println("7 - Total Spent");
+            System.out.println("8 - Add book to wishlist");
+            System.out.println("9 - Get total wishlist");
 
             if (userIsLogged(user)) {
-                System.out.println("8 - LogOut");
+                System.out.println("10 - LogOut");
             } else {
-                System.out.println("8 - SignIn");
-                System.out.println("9 - Register");
+                System.out.println("10 - SignIn");
+                System.out.println("11 - Register");
             }
 
-            System.out.println("10 - Back");
+            System.out.println("12 - Back");
 
             System.out.println("Type your choice: ");
             String choice = scanner.nextLine();
@@ -498,6 +500,21 @@ public class  Main {
                     break;
 
                 case "8":
+                	listBooks();
+                	
+                	System.out.println("Book ID: ");
+                	bookId = scanner.nextInt();
+                	
+                	Book book = new BookDAODecorator().get(bookId);
+                	user.getWishlist().addBook(book);
+
+                	break;
+                    
+                case "9":
+                	System.out.println("Wishlist total price: " + user.getWishlist().getTotalPrice());
+                	break;
+                	
+                case "10":
                     if (userIsLogged(user))
                         user = new EmptyUser();
                     else {
@@ -518,7 +535,7 @@ public class  Main {
 
                     break;
 
-                case "9":
+                case "11":
                     System.out.println("Email: ");
                     String email = scanner.nextLine();
 
@@ -536,7 +553,7 @@ public class  Main {
 
                     break;
 
-                case "10":
+                case "12":
                     run = false;
                     break;
 
@@ -554,6 +571,12 @@ public class  Main {
             return true;
 
         return false;
+    }
+    
+    private static void listBooks() {
+        List<Book> books = new BookDAODecorator().getAll();
+        for(Book b : books)
+            System.out.println("ID: " + b.getId() + " - Title: " + b.getTitle());
     }
 }
 

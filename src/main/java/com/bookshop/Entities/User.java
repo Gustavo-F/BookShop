@@ -7,6 +7,7 @@ import java.util.List;
 public abstract class User implements Observer{
     @Id @Column(unique = true) protected String email;
     protected String password;
+    @OneToOne protected Wishlist wishlist;
     @ManyToMany protected List<Book> library;
     @Transient protected CalculateUserLibrary calculateUserLibrary;
 
@@ -26,6 +27,13 @@ public abstract class User implements Observer{
 
     public abstract void removeBook(Book book);
 
+    public Wishlist getWishlist() {
+		if (wishlist == null)
+			wishlist = new Wishlist();
+		
+		return wishlist;
+	}
+    
     public void setCalculateStrategy(CalculateUserLibrary strategy) {
         this.calculateUserLibrary = strategy;
     }

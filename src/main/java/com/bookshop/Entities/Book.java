@@ -130,4 +130,9 @@ public class Book implements Observable, BookFacadeInterface<Genre> {
     public List<Genre> getAllGenres() {
         return getGenresList();
     }
+    
+    public void addProperties(Wishlist wishlist) {
+    	wishlist.addPropertie(WishlistProperties.PRICE, price);
+    	wishlist.addPropertie(WishlistProperties.PAGES, pages);
+    }
 }

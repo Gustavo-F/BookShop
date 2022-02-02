@@ -1,11 +1,11 @@
 package com.bookshop.DB;
 
-import com.bookshop.Entities.Genre;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Method;
-import java.time.temporal.UnsupportedTemporalTypeException;
-import java.util.List;
+
+import com.bookshop.Entities.Genre;
 
 public class GenreDAO implements InterfaceDAO<Genre> {
     @Override

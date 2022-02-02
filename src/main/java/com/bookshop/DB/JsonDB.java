@@ -1,6 +1,5 @@
 package com.bookshop.DB;
 
-import com.bookshop.Entities.Genre;
 import io.jsondb.InvalidJsonDbApiUsageException;
 import io.jsondb.JsonDBTemplate;
 import io.jsondb.crypto.Default1Cipher;
